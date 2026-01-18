@@ -1,8 +1,15 @@
 name: Generate Snake
 
 on:
+  # ✅ Run once immediately when you push to main (so it appears in Actions and creates output branch)
+  push:
+    branches: ["main"]
+
+  # ✅ Keep daily auto updates
   schedule:
     - cron: "0 0 * * *"
+
+  # ✅ Manual run button (after it appears)
   workflow_dispatch:
 
 permissions:
