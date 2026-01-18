@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="140" viewBox="0 0 1200 140">
+  <defs>
+    <style>
+      .bg { fill: #0d1117; }
+      .txt { fill: #c9d1d9; font: 600 28px Arial, sans-serif; }
+      .sub { fill: #8b949e; font: 400 18px Arial, sans-serif; }
+      .mono { fill: #8b949e; font: 400 16px 'Courier New', monospace; }
+      .pill { fill: #161b22; stroke: #30363d; stroke-width: 2; }
+    </style>
+  </defs>
+
+  <rect class="bg" x="0" y="0" width="1200" height="140" rx="16" />
+  <rect class="pill" x="30" y="30" width="1140" height="80" rx="14" />
+
+  <text class="txt" x="60" y="70">🏆 GitHub Trophies</text>
+  <text class="sub" x="60" y="98">Cached locally to avoid “Error Fetching Resource”. Auto-updates when trophy service is available.</text>
+
+  <text class="mono" x="940" y="88">stdSheraz</text>
+</svg>
