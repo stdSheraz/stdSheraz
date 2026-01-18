@@ -4,6 +4,8 @@ on:
   schedule:
     - cron: "0 2 * * *"
   workflow_dispatch:
+  push:
+    branches: ["main"]
 
 permissions:
   contents: write
@@ -14,11 +16,19 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Download trophy svg
+      - name: Download trophy svg (retry + validate)
         run: |
+          set -e
           mkdir -p assets
-          curl -L "https://github-profile-trophy.vercel.app/?username=stdSheraz&theme=dracula&no-frame=true&margin-w=10" \
+
+          # Download (retry because vercel endpoints sometimes fail)
+          curl -fL --retry 5 --retry-delay 3 \
+            -H "Accept: image/svg+xml" \
+            "https://github-profile-trophy.vercel.app/?username=stdSheraz&theme=dracula&no-frame=true&margin-w=10" \
             -o assets/trophy.svg
+
+          # Validate it is an SVG (not HTML error page)
+          head -n 5 assets/trophy.svg | grep -qi "<svg"
 
       - name: Commit changes
         run: |
