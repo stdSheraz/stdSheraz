@@ -98,15 +98,10 @@
 </tr>
 </table>
 
-<!-- 🏆 Trophy (safe mode)
-     ✅ Uncomment ONLY after this file exists:
-     https://raw.githubusercontent.com/stdSheraz/stdSheraz/main/assets/trophy.svg
--->
-<!--
+
 <p align="center">
   <img src="https://raw.githubusercontent.com/stdSheraz/stdSheraz/main/assets/trophy.svg" alt="github trophies" />
 </p>
--->
 
 
 <p align="center">
