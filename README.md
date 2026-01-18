@@ -29,7 +29,7 @@
 ## <img src="https://media.giphy.com/media/U6e6JUgqF684qSunZ2/giphy.gif" width="45" /> About Me
 
 <div align="center">
-  
+
 [![Typing SVG](https://readme-typing-svg.demolab.com?font=Fira+Code&size=30&pause=1000&center=true&vCenter=true&width=980&lines=Senior+Backend+Engineer;Cloud+Architect;Ride-Hailing+%2B+Delivery+%2B+Payments;Real-time+Systems+%7C+Microservices+%7C+Wallet+Ledgers;GCP+%7C+GKE+%7C+Cloud+Armor+%7C+Terraform;React+%7C+React+Native+%7C+Unity)](https://git.io/typing-svg)
 
 </div>
@@ -102,9 +102,12 @@
   <img src="https://github-profile-trophy.vercel.app/?username=stdSheraz&theme=dracula&no-frame=true&margin-w=10" />
 </p>
 
-<!-- Snake animation (requires workflow that pushes to `output` branch) -->
 <p align="center">
-  <img src="https://raw.githubusercontent.com/stdSheraz/stdSheraz/output/github-contribution-grid-snake-dark.svg" alt="github contribution snake animation" />
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/stdSheraz/stdSheraz/output/github-contribution-grid-snake-dark.svg" />
+    <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/stdSheraz/stdSheraz/output/github-contribution-grid-snake.svg" />
+    <img alt="github contribution snake animation" src="https://raw.githubusercontent.com/stdSheraz/stdSheraz/output/github-contribution-grid-snake.svg" />
+  </picture>
 </p>
 
 <img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif">
