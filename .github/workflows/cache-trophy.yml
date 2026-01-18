@@ -16,24 +16,83 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Download trophy svg (retry + validate)
+      - name: Download trophy svg safely (never fail)
+        shell: bash
         run: |
-          set -e
           mkdir -p assets
+          TMP="assets/.trophy.tmp.svg"
 
-          # Download (retry because vercel endpoints sometimes fail)
-          curl -fL --retry 5 --retry-delay 3 \
-            -H "Accept: image/svg+xml" \
-            "https://github-profile-trophy.vercel.app/?username=stdSheraz&theme=dracula&no-frame=true&margin-w=10" \
-            -o assets/trophy.svg
+          # Try multiple endpoints (first is original; others are fallbacks)
+          URLS=(
+            "https://github-profile-trophy.vercel.app/?username=stdSheraz&theme=dracula&no-frame=true&margin-w=10"
+            "https://github-profile-trophy.vercel.app/?username=stdSheraz&theme=dracula&no-frame=true&margin-w=10&no-bg=true"
+          )
 
-          # Validate it is an SVG (not HTML error page)
-          head -n 5 assets/trophy.svg | grep -qi "<svg"
+          downloaded=0
 
-      - name: Commit changes
+          for url in "${URLS[@]}"; do
+            echo "Trying: $url"
+
+            # Download without failing the job; capture HTTP status code
+            http_code="$(curl -sSL --connect-timeout 10 --max-time 25 \
+              -H "Accept: image/svg+xml" \
+              -o "$TMP" -w "%{http_code}" "$url" || true)"
+
+            echo "HTTP: $http_code"
+
+            # Only accept 200 OK
+            if [ "$http_code" != "200" ]; then
+              echo "Skip: non-200 response"
+              continue
+            fi
+
+            # Validate content looks like SVG (avoid saving HTML error pages)
+            if ! head -n 20 "$TMP" | grep -qi "<svg"; then
+              echo "Skip: downloaded content is not SVG"
+              continue
+            fi
+
+            downloaded=1
+            break
+          done
+
+          # If we couldn't download a valid SVG, exit successfully (do not break workflow)
+          if [ "$downloaded" != "1" ]; then
+            echo "Trophy service unavailable or invalid response. Keeping existing file. ✅"
+            rm -f "$TMP"
+            exit 0
+          fi
+
+          # If trophy.svg doesn't exist yet, create it
+          if [ ! -f assets/trophy.svg ]; then
+            mv "$TMP" assets/trophy.svg
+            echo "Created assets/trophy.svg ✅"
+            exit 0
+          fi
+
+          # If same as existing, do nothing
+          if cmp -s "$TMP" assets/trophy.svg; then
+            echo "No changes in trophy.svg ✅"
+            rm -f "$TMP"
+            exit 0
+          fi
+
+          # Replace with new version
+          mv "$TMP" assets/trophy.svg
+          echo "Updated assets/trophy.svg ✅"
+
+      - name: Commit changes (only if changed)
+        shell: bash
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          # Only commit if there's an actual change
+          if git diff --quiet; then
+            echo "No changes to commit ✅"
+            exit 0
+          fi
+
           git add assets/trophy.svg
-          git commit -m "chore: update trophy" || exit 0
+          git commit -m "chore: update trophy (cached)" || exit 0
           git push
